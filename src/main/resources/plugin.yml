@@ -1,0 +1,4 @@
+name: Sapling
+version: @version@
+main: me.tassu.sapling.Sapling
+depend: [LuckPerms]
