@@ -27,8 +27,8 @@ quit: "&a%user%&7 has left the network."
 switch: "&a%user%&7 has switched servers from &2%from%&7 to &2%to%&7."
 
 helpop:
-  empty: "&7[&bBOT&7] &bClaudia&7: Empty message is not very useful."
-  sent: "&7[&bBOT&7] &bClaudia&7: Our elite samurai is now looking to your request."
+  empty: "Empty message is not very useful."
+  sent: "Our elite samurai is now looking to your request."
   received: "&2(HelpOP) &a%user% &7@ %server% >> &r%message%"
 
 whisper:

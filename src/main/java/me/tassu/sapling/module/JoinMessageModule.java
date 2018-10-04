@@ -27,9 +27,7 @@ package me.tassu.sapling.module;
 import com.google.inject.Inject;
 import me.tassu.sapling.Sapling;
 import me.tassu.sapling.SaplingModule;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
-import net.md_5.bungee.api.event.PostLoginEvent;
-import net.md_5.bungee.api.event.ServerSwitchEvent;
+import net.md_5.bungee.api.event.*;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.event.EventHandler;
@@ -60,22 +58,23 @@ public class JoinMessageModule implements SaplingModule, Listener {
 
     @EventHandler
     public void onQuit(PlayerDisconnectEvent event) {
+        if (event.getPlayer().getServer() == null) return;
         getProxyServer().getScheduler().schedule(sapling, () -> broadcast(quitMessage
                 .replace("%user%", getName(event.getPlayer()))), 1, TimeUnit.SECONDS);
     }
 
     @EventHandler
-    public void onSwitch(ServerSwitchEvent event) {
-        String oldServer = event.getPlayer().getServer().getInfo().getName();
+    public void onSwitch(ServerConnectEvent event) {
+        if (event.getPlayer().getServer() == null) return;
+        if (event.getTarget().getName().equals(event.getPlayer().getServer().getInfo().getName())) return;
+        String old = event.getPlayer().getServer().getInfo().getName();
 
         getProxyServer().getScheduler().schedule(sapling, () -> {
-            if (event.getPlayer().getServer() == null) return;
-            if (oldServer.equals(event.getPlayer().getServer().getInfo().getName())) return;
-
+            if (!event.getTarget().getName().equals(event.getPlayer().getServer().getInfo().getName())) return;
             broadcast(switchMessage
                     .replace("%user%", getName(event.getPlayer()))
-                    .replace("%from%", oldServer)
-                    .replace("%to%", event.getPlayer().getServer().getInfo().getName()));
+                    .replace("%from%", old)
+                    .replace("%to%", event.getTarget().getName()));
         }, 1, TimeUnit.SECONDS);
     }
 
